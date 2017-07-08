@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load blogs_tags %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
@@ -6,5 +7,44 @@
     <p class="date">
         Published {{ post.publish }} by {{ post.author }}
     </p>
-    {{ post.body|linebreaks }}
+    {{ post.body|markdown}}
+
+    <h3>
+        {% for post in similar_posts %}
+            <p>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                Tags: {{ post.tags }}
+            </p>
+            {% empty %}
+                There are no similar posts yet.
+        {% endfor %}
+    </h3>
+
+    {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+    {% endwith %}
+
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+                {{ comment.name  }}
+                {{ comment.created }}
+            </p>
+            {{ comment.body|linebreaks }}
+        </div>
+        {% empty %}
+            <p>There are no comments.</p>
+    {% endfor %}
+    {% if new_comment %}
+        <h2>Your comment has been added.</h2>
+    {% else %}
+        <h2>Add a new comment</h2>
+        <form action="." method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type ="submit" value="Add Comment"> </p>
+        </form>
+    {% endif %}
 {% endblock %}
