@@ -2,7 +2,7 @@
 {% load blogs_tags %}
 {% block title %}Recipe{% endblock %}
 {% block content %}
-    <h1>Recipes</h1>
+    {% comment %}<h1>Recipes</h1>{% endcomment %}
     {% if tag %}
         <h2>Posts tagged with "{{ tag.name }}"</h2>
     {% endif %}
