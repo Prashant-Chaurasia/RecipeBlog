@@ -25,9 +25,9 @@ def post_list(request, tag_slug=None):
         posts = paginator.page(paginator.num_pages)
     return render(request,'blog/post/list.html',{'page':page,'posts':posts,'tag':tag})
 
-def post_detail(request,year,month,day,post):
-    post = get_object_or_404(Post, slug=post,status='published',publish__year=year
-                             ,publish__month=month,publish__day=day)
+def post_detail(request,year,month,day,slug):
+    post = get_object_or_404(Post, slug=slug,status='published',publish__year=year
+                         ,publish__month=month,publish__day=day)
     # list pf active comments for this post
     comments = post.comments.filter(active = True)
     if(request.method=='POST'):
